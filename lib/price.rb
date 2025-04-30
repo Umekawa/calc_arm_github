@@ -8,6 +8,8 @@ class Price
     @target_month = setting.target_month
     @plan = setting.plan
     @armnizing_repositries = setting.armnizing_repositries
+    @armnizing_files = setting.armnizing_files
+    @already_armnized_files = setting.already_armnized_files
     @already_armnized_repositries = setting.already_armnized_repositries
     initialize_price_quantity
     aggregate
@@ -29,6 +31,7 @@ class Price
   def output
     puts "Target month: #{@target_month}"
     puts "Armnizing repositries: #{@armnizing_repositries}"
+    puts "Armnizing files: #{@armnizing_files}"
     puts "Amd: #{@amd_quantity} minutes and #{fixed_amd_price}USD"
     puts "Arm(Already): #{@arm_quantity} minutes and #{@already_armed_price.round(2)}USD"
     puts "Arm(new): #{@armnizing_quantity} minutes and #{@armnizing_price.round(2)}USD"
@@ -72,10 +75,10 @@ class Price
       if row['Product'].eql?('Shared Storage')
         @storage_price += row_price
       elsif row['Product'].eql?('Actions')
-        if @armnizing_repositries.include?(row['Repository Slug'])
+        if @armnizing_repositries.include?(row['Repository Slug']) || @armnizing_files.include?(row['Actions Workflow'])
           @armnizing_price += row_price * 5 / 8
           @armnizing_quantity += row_quantity
-        elsif @already_armnized_repositries.include?(row['Repository Slug'])
+        elsif @already_armnized_repositries.include?(row['Repository Slug']) || @already_armnized_files.include?(row['Actions Workflow'])
           @arm_quantity += row_quantity
           @already_armed_price += row_price
         else

@@ -16,12 +16,24 @@ class Setting
     ENV['ARMNIZING_REPOSITRIES'].split(',')
   end
 
+  def armnizing_files
+    ENV['ARMNIZING_FILES'].split(',').map do |file|
+      ".github/workflows/#{file}"
+    end
+  end
+
   def target_month
     ENV.fetch('TARGET_MONTH', nil)
   end
 
   def already_armnized_repositries
     ENV['ALREADY_ARMNIZED_REPOSITRIES'].split(',')
+  end
+
+  def already_armnized_files
+    ENV['ALREADY_ARMNIZED_FILES'].split(',').map do |file|
+      ".github/workflows/#{file}"
+    end
   end
 
   def file_name
